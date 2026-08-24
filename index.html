@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pixely</title>
+<meta name="description" content="Pixely — AI-powered photo editing, built by 05." />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<section id="login-screen" class="screen login-screen">
+  <div class="login-card">
+    <div class="brand-mark">Pixely</div>
+    <h1>Private Beta</h1>
+    <p class="subtitle">Beta Access</p>
+    <p class="hint">Enter your beta access code to continue.</p>
+    <form id="login-form" autocomplete="off">
+      <input
+        id="login-code"
+        type="text"
+        maxlength="6"
+        placeholder="______"
+        aria-label="Beta access code"
+        autocapitalize="characters"
+        autocomplete="off"
+      />
+      <button type="submit" class="btn btn-primary btn-block">Continue</button>
+    </form>
+    <p id="login-error" class="error-text" hidden>Invalid access code. Please check your code and try again.</p>
+    <p class="powered-by">Built by 05</p>
+  </div>
+</section>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app" class="app" hidden>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark small">Pixely</span>
+      <span class="brand-name">Photo Editor</span>
+    </div>
+    <div class="topbar-right">
+      <span id="session-counter" class="chip">Edits this session: 0</span>
+      <button id="btn-settings" class="btn btn-ghost" aria-label="Settings">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+      <button id="btn-privacy" class="btn btn-ghost" aria-label="Privacy info">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.5 8.7 8 11 4.5-2.3 8-6 8-11V5l-8-3z"/></svg>
+        <span>Privacy</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar sidebar-left">
+      <p class="tool-group-label">Selection</p>
+      <div class="tool-group">
+        <button class="tool-btn" data-mode="select" title="Select Area"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1.5" stroke-dasharray="3 2.5"/></svg> Select Area</button>
+        <button class="tool-btn" data-mode="freeform" title="Freeform Select"><svg class="icon" viewBox="0 0 24 24"><path d="M4 17c2-6 4-11 8-12 3-1 5 2 3 5-3 4-9 4-9 8 0 2 3 3 5 1 2-3 5-6 8-6"/></svg> Freeform</button>
+        <button class="tool-btn" data-mode="whole" title="Select Whole Image"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1.5"/></svg> Whole Image</button>
+        <button class="tool-btn" data-mode="pan" title="Move / Pan"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M6 6l-4 6 4 6M18 6l4 6-4 6"/></svg> Pan</button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-clear-selection" class="tool-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> Clear Selection</button>
+      </div>
+      <p class="tool-group-label">History</p>
+      <div class="tool-group">
+        <button id="btn-undo" class="tool-btn" title="Undo"><svg class="icon" viewBox="0 0 24 24"><path d="M3 10h11a5 5 0 0 1 0 10h-2M3 10l5-5M3 10l5 5"/></svg> Undo</button>
+        <button id="btn-redo" class="tool-btn" title="Redo"><svg class="icon" viewBox="0 0 24 24"><path d="M21 10H10a5 5 0 0 0 0 10h2M21 10l-5-5M21 10l-5 5"/></svg> Redo</button>
+        <button id="btn-reset" class="tool-btn" title="Reset to Original"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Reset to Original</button>
+      </div>
+      <p class="tool-group-label">Zoom</p>
+      <div class="tool-group zoom-group">
+        <button id="btn-zoom-out" class="tool-btn small">−</button>
+        <span id="zoom-level" class="zoom-level">100%</span>
+        <button id="btn-zoom-in" class="tool-btn small">+</button>
+        <button id="btn-zoom-fit" class="tool-btn small">Fit</button>
+      </div>
+    </aside>
+
+    <!-- CENTRE CANVAS -->
+    <section class="canvas-area">
+      <div id="upload-zone" class="upload-zone">
+        <div class="upload-inner">
+          <div class="upload-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 16V4M12 4 7 9M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
+          <p class="upload-title">Upload a photograph to begin editing.</p>
+          <p class="upload-sub">Drag &amp; drop, click to browse, or paste from clipboard.</p>
+          <button id="btn-browse" class="btn btn-primary">Choose Photo</button>
+          <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+          <p class="upload-formats">JPEG · PNG · WebP</p>
+        </div>
+      </div>
+
+      <div id="editor-zone" class="editor-zone" hidden>
+        <div id="canvas-wrapper" class="canvas-wrapper">
+          <canvas id="editor-canvas"></canvas>
+        </div>
+
+        <div id="compare-bar" class="compare-bar" hidden>
+          <label class="compare-toggle">
+            <input type="checkbox" id="toggle-compare" />
+            Before / After
+          </label>
+          <div id="compare-slider-wrap" class="compare-slider-wrap" hidden>
+            <div class="compare-container" id="compare-container">
+              <img id="compare-before" alt="Original" />
+              <div id="compare-after-wrap" class="compare-after-wrap">
+                <img id="compare-after" alt="Edited" />
+              </div>
+              <div id="compare-divider" class="compare-divider"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-meta" id="image-meta"></div>
+      </div>
+
+      <div id="generating-overlay" class="generating-overlay" hidden>
+        <div class="generating-card">
+          <div class="spinner"></div>
+          <p class="generating-title">Pixely is editing your photograph…</p>
+          <p class="generating-detail" id="generating-detail"></p>
+          <p class="generating-elapsed" id="generating-elapsed">00:00</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="sidebar sidebar-right">
+      <div id="empty-controls" class="panel">
+        <p class="muted">Upload a photograph to begin.</p>
+      </div>
+
+      <div id="edit-controls" class="panel" hidden>
+        <div class="panel-header">
+          <h2>Edit</h2>
+          <span id="editing-mode-chip" class="chip subtle">Editing: Entire Image</span>
+        </div>
+
+        <label class="field-label" for="prompt-box">What would you like to change?</label>
+        <textarea id="prompt-box" rows="4" placeholder="Remove the person in the background and reconstruct the background naturally."></textarea>
+
+        <div class="prompt-actions">
+          <button id="btn-improve-prompt" class="btn btn-ghost small"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></svg> Improve Prompt</button>
+        </div>
+
+        <div class="presets" id="presets"></div>
+
+        <button id="btn-generate" class="btn btn-primary btn-block btn-large">Generate Edit</button>
+        <p class="no-selection-hint" id="no-selection-hint">Select an area or choose Entire Image.</p>
+
+        <div class="history-section" id="history-section">
+          <h3>History</h3>
+          <p class="muted small" id="history-empty">Your edits will appear here.</p>
+          <div id="history-list" class="history-list"></div>
+        </div>
+
+        <button id="btn-export" class="btn btn-secondary btn-block">Export</button>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<!-- ===================== FIRST RUN GUIDE ===================== -->
+<div id="first-run" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <h2>Welcome to Pixely</h2>
+    <p class="muted">Upload a photograph to begin.</p>
+    <ol class="guide-steps">
+      <li>Upload your photo</li>
+      <li>Select the area you want to change</li>
+      <li>Describe your edit</li>
+      <li>Generate</li>
+      <li>Keep refining or export</li>
+    </ol>
+    <button id="btn-dismiss-first-run" class="btn btn-primary btn-block">Get Started</button>
+  </div>
+</div>
+
+<!-- ===================== SETTINGS MODAL ===================== -->
+<div id="settings-modal" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <h2>Settings</h2>
+
+    <div class="settings-section">
+      <h3>Pollinations API</h3>
+      <label class="field-label" for="api-key-input">Your Pollinations API key</label>
+      <input id="api-key-input" type="password" placeholder="sk_..." autocomplete="off" />
+      <p class="muted small">Stored only in this browser (localStorage). Never sent anywhere except gen.pollinations.ai. See README for details.</p>
+      <button id="btn-save-key" class="btn btn-secondary small">Save Key</button>
+
+      <label class="field-label" for="model-select">Model</label>
+      <select id="model-select"></select>
+    </div>
+
+    <div class="settings-section">
+      <h3>Watermark</h3>
+      <label class="checkbox-row"><input type="checkbox" id="watermark-enabled" /> Enabled</label>
+      <label class="field-label" for="watermark-opacity">Opacity</label>
+      <input id="watermark-opacity" type="range" min="0" max="1" step="0.05" />
+      <label class="field-label" for="watermark-size">Size (% of image width)</label>
+      <input id="watermark-size" type="range" min="2" max="20" step="1" />
+    </div>
+
+    <div class="settings-section">
+      <h3>Session Limits</h3>
+      <p class="muted small">Max edits this session: <span id="settings-max-edits"></span></p>
+      <p class="muted small">Edits used: <span id="settings-edits-used">0</span></p>
+    </div>
+
+    <button id="btn-close-settings" class="btn btn-primary btn-block">Close</button>
+  </div>
+</div>
+
+<!-- ===================== PRIVACY MODAL ===================== -->
+<div id="privacy-modal" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <h2>Privacy</h2>
+    <ul class="privacy-list">
+      <li>Photographs are sent directly from your browser to Pollinations (gen.pollinations.ai) for processing.</li>
+      <li>This app has no backend server of its own — it cannot and does not store your photographs anywhere.</li>
+      <li>Editing history and your API key are stored locally in this browser only.</li>
+      <li>Avoid uploading confidential material if you are not comfortable with third-party AI processing.</li>
+      <li>Pollinations' own terms and privacy policy govern how they process requests sent to their API.</li>
+    </ul>
+    <button id="btn-close-privacy" class="btn btn-primary btn-block">Close</button>
+  </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- ===================== CONFIRM DIALOG ===================== -->
+<div id="confirm-modal" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <p id="confirm-message"></p>
+    <div class="modal-actions">
+      <button id="confirm-cancel" class="btn btn-ghost">Cancel</button>
+      <button id="confirm-ok" class="btn btn-primary">Continue</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/pollinations.js"></script>
+<script src="js/watermark.js"></script>
+<script src="js/history.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

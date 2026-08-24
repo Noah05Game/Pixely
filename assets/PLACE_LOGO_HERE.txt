@@ -1,0 +1,10 @@
+Put your logo here as: 05ai-watermark.png
+
+Requirements:
+- Filename must be exactly: 05ai-watermark.png
+- PNG format
+- Transparent background recommended
+- Reasonably high resolution (the app scales it down automatically)
+
+Until this file exists, the app will simply skip watermarking on export —
+everything else still works normally.
